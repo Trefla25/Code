@@ -1,0 +1,145 @@
+import java.util.Arrays;
+import java.util.Collections;
+
+class Book extends Library implements Comparable<Book>{
+    public String title;
+    public String author;
+    public Book(String title,String author){
+        this.title=title;
+        this.author=author;
+    }
+    public String toString(){
+        String s="";
+        s = s + "Title: " + this.title + " " + " - Author: " + this.author;
+        return s;
+    }
+    public String compAuthor(){
+        String s="";
+        s = s + "Author: " + this.author + " " + "Title: " + this.title;
+        return s;
+    }
+     public int compareTo(Book b) {
+        return compAuthor().compareTo(b.compAuthor());
+    }
+}
+   class Library{
+    private String librarian;
+    public Book[] books = new Book[5]; 
+    public static int countb = 0;
+    public boolean addBook(Book b){
+       this.books[this.countb++] = b;
+    return true;
+    }
+    public String getBooks(){
+        String s="";
+        for(int i=0;i<countb;i++){
+            s += "Book " + i + ": " + books[i].title + " - Author: " + books[i].author +"\n";
+        }
+        return s;
+    }     
+    public void sortBooks() {
+    Arrays.sort(books);
+    System.out.println(Arrays.asList(books)); // sorted by author , but im showing Title - Author format to better see the book title
+    }
+       public Book deleteBook(String title){
+           for(int i=0;i<countb;i++){
+               if(this.books[i].title.equals(title)){
+                   if(i==(countb-1)){
+                       Book aux = new Book(this.books[i].title,this.books[i].author);
+                       this.books[this.countb-1] = null;
+                       this.countb--;
+                       return aux;
+                    }
+                   else {
+                    Book aux = new Book(this.books[i].title,this.books[i].author);
+                    this.books[i] = this.books[this.countb-1];
+                    this.books[this.countb-1] = null;
+                    this.countb--;
+                    return this.books[i];
+                    }
+                 }
+            }
+        return null;
+        }
+       public Book searchBook(String title){
+           for(int i=0;i<countb;i++){
+               if(this.books[i].title.equals(title)){
+                   return books[i];
+               }
+           }
+           return null;
+       }
+       public Book changeAuthor(String title, String author){
+           for(int i=0;i<countb;i++){
+               if(this.books[i].title.equals(title)){
+                   this.books[i].author=author;
+                   return books[i];
+               }
+           }
+           return null;
+       }
+}
+public class Main {
+    public static void main(String[] args) {
+        //creating some books and printing them for a better view;
+        System.out.println("All the books that we will be using:");
+        System.out.println();
+        Book b1 = new Book("Moara cu noroc", "Ioan Slavici");
+        Book b2 = new Book("Divergent" , "Veronica Roth");
+        Book b3 = new Book("Piramida Rosie" , "Rick Riordan");
+        Book b4 = new Book("Sub aceeasi stea" , "John Green");
+        Book b5 = new Book("Tronul de foc" , "Rick Riordan" );
+        System.out.println(b1.toString());
+        System.out.println(b2.toString());
+        System.out.println(b3.toString());
+        System.out.println(b4.toString());
+        System.out.println(b5.toString());
+        System.out.println();
+        //creating The Pergamum Library;
+        Library pergamum = new Library();
+        //adding all the books to the Library;
+        pergamum.addBook(b1);
+        pergamum.addBook(b2);
+        pergamum.addBook(b3);
+        pergamum.addBook(b4);
+        pergamum.addBook(b5);
+        System.out.println("These books are currently available in The Pergamum: ");
+        System.out.println();
+        System.out.println(pergamum.getBooks());
+        System.out.println();
+        //sorting the books by author and title;
+        System.out.println("These are all the books in the library, sorted by the author:");
+        System.out.println();
+        pergamum.sortBooks();
+        System.out.println();
+        //deleting the first book,checking the "else";
+        Book tmp = pergamum.deleteBook("Sub aceeasi stea");
+        System.out.println("These books are currently available in The Pergamum: ");
+        System.out.println();
+        System.out.println(pergamum.getBooks());
+        //deleting the second book,checking the "if";
+        Book tmp2 = pergamum.deleteBook("Tronul de foc");
+        System.out.println("These books are currently available in The Pergamum: ");
+        System.out.println();
+        System.out.println(pergamum.getBooks());
+        System.out.println();
+        //searching for a present book;
+        System.out.println("These is the book you are looking for: ");
+        System.out.println();
+        System.out.println(pergamum.searchBook("Moara cu noroc"));
+        System.out.println();
+        //searching for a deleted book;
+        System.out.println("These is the book you are looking for: ");
+        System.out.println();
+        System.out.println(pergamum.searchBook("Tronul de foc"));
+        System.out.println();
+        //changing the author of a book;
+        System.out.println("These is the current book: ");
+        System.out.println();
+        System.out.println(b2.toString());
+        System.out.println();
+        System.out.println("These is the book after the change of the author: ");
+        System.out.println();
+        System.out.println(pergamum.changeAuthor("Divergent" , "Lunguleasa Eugen Alexandru"));
+    }
+}
